@@ -4,7 +4,7 @@ Combined PHYS227 Physics, Step-by-Step Calculus & Engineering Applications Site.
 Built using ONLY the CISC108/UD Drafter web framework (`drafter`) and Python's
 standard library (`math`, `re`, `dataclasses`)—zero external dependencies.
 Splits the site into three interconnected workspaces:
-  1. Physics Idea and Applications (Labs 1-9 Solvers & Statistical Error Tools)
+  1. Physics Idea and Applications (Classic Experiments Solvers, Lab Manual & Error Tools)
   2. Calculus Calculations and Explanations (Step-by-Step Solver & Concept Tutor)
   3. Engineering & Science Applications Info (Calculus in Thermo, Statics, Fluids, Kinetics)
 """
@@ -39,12 +39,13 @@ from drafter import (
 # GITHUB PAGES SITE CONFIGURATION (Step 0)
 # ==============================================================================
 
-set_website_title("Where's My Desk")
+set_website_title("PHYS227 & Calculus Interactive Platform")
 set_site_information(
-    author="Jacob Muzzi",
+    author="Your Name",
     description=(
-        "Interactive solver and educational reference for PHYS227 Labs 1-9, "
-        "step-by-step calculus calculations, and engineering course applications."
+        "Interactive solver, in-person lab manual, and educational reference for "
+        "classic physics experiments, step-by-step calculus calculations, and "
+        "engineering course applications."
     ),
     sources="UDel PHYS227 Lab Manuals (Labs 1-9) and Drafter Documentation.",
     planning=[],
@@ -87,16 +88,228 @@ TABLE1_METALS: dict[str, float] = {
 }
 
 LAB_TOPICS: list[str] = [
-    "Lab 1: Unit Conversions & Cylinder Density",
-    "Lab 2: Inclined Plane Gravity",
-    "Lab 3: 2D Vector Addition & Force Table",
-    "Lab 4: Projectile Motion Range",
-    "Lab 5: Kinetic Friction Coefficient",
-    "Lab 6: Vertical Spring Mechanical Energy",
-    "Lab 7: Impulse-Momentum Theorem",
-    "Lab 8: Rotational Moment of Inertia",
-    "Lab 9: Simple Pendulum & Small Angle",
+    "Lab 1: Archimedes Water Displacement Density",
+    "Lab 2: Atwood Machine Gravity Acceleration",
+    "Lab 3: Suspended Cable Tension & Equilibrium",
+    "Lab 4: Spring-Launcher Table-Edge Projectile",
+    "Lab 5: Towed Sled Kinetic Friction",
+    "Lab 6: Vertical Bungee Hooke's Law Energy",
+    "Lab 7: Magnetic Cart Rebound Impulse-Momentum",
+    "Lab 8: Flywheel & Slender Bar Rotational Inertia",
+    "Lab 9: Long-Wire Foucault Pendulum & Small Angle",
 ]
+
+# UI metadata for each lab: friendly parameter labels, default values,
+# general scientific idea, and step-by-step in-person lab procedure.
+LAB_DETAILS: dict[str, dict[str, Any]] = {
+    "Lab 1: Archimedes Water Displacement Density": {
+        "labels": [
+            "Specimen Mass m (g):",
+            "Mass Uncertainty δm (g):",
+            "Initial Water Vol V_i (mL):",
+            "Submerged Water Vol V_f (mL):",
+        ],
+        "defaults": ["134.5", "0.2", "50.0", "65.0"],
+        "general_idea": (
+            "Proves Archimedes' Principle and uncertainty propagation by determining "
+            "the density ρ = m / (V_f - V_i) of an irregular metal sample via fluid "
+            "displacement, rounding error to 1-2 significant figures, and matching "
+            "against standard reference metals within 2-sigma agreement."
+        ),
+        "procedure": (
+            "1. Zero a digital balance and record the dry mass m and scale uncertainty δm "
+            "of the unknown metal specimen.\n"
+            "2. Fill a 100 mL graduated cylinder halfway with water and read the bottom "
+            "of the meniscus (V_i) at eye level (±0.2 mL reading uncertainty).\n"
+            "3. Gently slide the tilted specimen into the cylinder without splashing and "
+            "record the new water level (V_f).\n"
+            "4. Compute displaced volume V = V_f - V_i, propagate volume and density "
+            "uncertainties, and identify matching metals in Table 1."
+        ),
+    },
+    "Lab 2: Atwood Machine Gravity Acceleration": {
+        "labels": [
+            "Lighter Mass m1 (kg):",
+            "Heavier Mass m2 (kg):",
+            "Drop Distance d (m):",
+            "Measured Fall Time t (s):",
+        ],
+        "defaults": ["0.200", "0.220", "1.000", "2.060"],
+        "general_idea": (
+            "Demonstrates Newton's Second Law for coupled systems by slowing vertical "
+            "free-fall with a counterweighted pulley. Measuring drop time t over height d "
+            "yields g_exp = [2d(m1 + m2)] / [t²(m2 - m1)], tested against 9.81 m/s²."
+        ),
+        "procedure": (
+            "1. Mount a low-friction smart pulley to a vertical ring stand and thread a "
+            "light string over the groove.\n"
+            "2. Attach mass m1 to one end and slightly heavier mass m2 to the other, "
+            "holding m2 at a measured height d above a foam landing pad.\n"
+            "3. Release m2 from rest while simultaneously starting a photogate timer; "
+            "record the elapsed fall time t across 5 trials.\n"
+            "4. Compute experimental g and check 2-sigma agreement with 9.81 m/s²."
+        ),
+    },
+    "Lab 3: Suspended Cable Tension & Equilibrium": {
+        "labels": [
+            "Left Load Mass m1 (g):",
+            "Left Cable Angle θ1 (deg CCW):",
+            "Right Load Mass m2 (g):",
+            "Right Cable Angle θ2 (deg CCW):",
+        ],
+        "defaults": ["250.0", "35.0", "300.0", "140.0"],
+        "general_idea": (
+            "Demonstrates 2D static vector equilibrium (ΣF_x = 0, ΣF_y = 0) using a "
+            "suspended junction ring (similar to overhead traffic-light cables) where "
+            "a third anchor line must supply the exact equilibrant vector."
+        ),
+        "procedure": (
+            "1. Connect three lightweight cords to a central steel ring suspended "
+            "horizontally above a protractor grid board.\n"
+            "2. Route Cord 1 over a pulley at angle θ1 with hanging mass m1, and Cord 2 "
+            "over a second pulley at angle θ2 with hanging mass m2.\n"
+            "3. Calculate the resultant force components F_x and F_y, then position "
+            "Cord 3 at θ_eq = θ_net + 180° with equivalent balancing mass m_eq.\n"
+            "4. Verify that the central ring floats centered without touching the pin."
+        ),
+    },
+    "Lab 4: Spring-Launcher Table-Edge Projectile": {
+        "labels": [
+            "Spring Constant k (N/m):",
+            "Spring Compression Δx (m):",
+            "Table Drop Height h (m):",
+            "Measured Range x_meas (m):",
+        ],
+        "defaults": ["120.0", "0.080", "0.950", "1.210"],
+        "general_idea": (
+            "Combines elastic potential energy (½kΔx² = ½mv₀²) with independent 2D "
+            "kinematic trajectories to predict horizontal landing range x_pred = v₀√(2h/g) "
+            "of a steel ball launched horizontally off a lab bench."
+        ),
+        "procedure": (
+            "1. Clamp a horizontal spring launcher flush with the edge of a lab bench and "
+            "measure vertical drop height h from ball center to floor using a plumb bob.\n"
+            "2. Load a 0.025 kg steel sphere, compress the spring by Δx, and fire test "
+            "shots onto carbon paper taped over white butcher paper on the floor.\n"
+            "3. Measure the horizontal distance x_meas from the plumb-bob mark to the "
+            "carbon impact cluster.\n"
+            "4. Compare x_meas against theoretical range x_pred using the 2-sigma test."
+        ),
+    },
+    "Lab 5: Towed Sled Kinetic Friction": {
+        "labels": [
+            "Sled Mass m_sled (kg):",
+            "Hanging Tow Mass m_h (kg):",
+            "Measured Accel a (m/s²):",
+            "Track Incline Angle θ (deg):",
+        ],
+        "defaults": ["0.450", "0.180", "1.450", "5.0"],
+        "general_idea": (
+            "Isolates sliding kinetic friction f_k = μ_k N on a tilted wooden track by "
+            "balancing gravitational, normal, and tension forces on a coupled sled-and-"
+            "pulley system."
+        ),
+        "procedure": (
+            "1. Weigh a felt-bottomed wooden sled (m_sled) and set the track incline to "
+            "angle θ using a digital inclinometer.\n"
+            "2. Attach a tow string from the sled over a track-end pulley to a hanging "
+            "mass m_h.\n"
+            "3. Give the sled a gentle nudge upward to overcome static friction and record "
+            "constant acceleration a with a ultrasonic motion sensor.\n"
+            "4. Solve for kinetic friction force f_k, normal force N, and coefficient μ_k."
+        ),
+    },
+    "Lab 6: Vertical Bungee Hooke's Law Energy": {
+        "labels": [
+            "Bungee Stiffness k (N/m):",
+            "Unstretched Length y_s (m):",
+            "Current Height y (m):",
+            "Instantaneous Speed v (m/s):",
+        ],
+        "defaults": ["14.5", "0.400", "0.520", "0.850"],
+        "general_idea": (
+            "Verifies conservation of total mechanical energy (E_tot = K + U_g + U_s) "
+            "for a 0.100 kg jumper oscillating vertically on an elastic cord."
+        ),
+        "procedure": (
+            "1. Suspend an elastic bungee cord from an overhead force sensor and measure "
+            "its relaxed unstretched equilibrium position y_s.\n"
+            "2. Hang a 0.100 kg mass, pull downward to stretch the cord, and release "
+            "cleanly into vertical oscillation.\n"
+            "3. Place a motion detector directly beneath the oscillating mass to record "
+            "simultaneous position y(t) and velocity v(t).\n"
+            "4. Verify that K + U_g + U_s remains constant across top, middle, and bottom."
+        ),
+    },
+    "Lab 7: Magnetic Cart Rebound Impulse-Momentum": {
+        "labels": [
+            "Cart Mass m (kg):",
+            "Incoming Velocity v_i (m/s):",
+            "Rebound Velocity v_f (m/s):",
+            "Force Sensor Impulse J (N·s):",
+        ],
+        "defaults": ["0.500", "-0.620", "0.580", "0.605"],
+        "general_idea": (
+            "Directly tests the Impulse-Momentum Theorem (J = ∫ F dt = Δp = m(v_f - v_i)) "
+            "during a non-contact magnetic bumper collision."
+        ),
+        "procedure": (
+            "1. Level a low-friction dynamics track and mount a high-rate force sensor "
+            "with a magnetic bumper at one end.\n"
+            "2. Roll a wheeled cart of mass m equipped with an opposing magnet toward "
+            "the bumper while recording velocity via a motion encoder.\n"
+            "3. Integrate the area under the Force vs. Time collision spike to obtain "
+            "measured impulse J, and read pre-/post-collision velocities v_i and v_f.\n"
+            "4. Check whether Δp and J agree within 2-sigma experimental uncertainty."
+        ),
+    },
+    "Lab 8: Flywheel & Slender Bar Rotational Inertia": {
+        "labels": [
+            "Flywheel Mass m_d (kg):",
+            "Flywheel Diameter D (m):",
+            "Slender Bar Mass m_p (kg):",
+            "Slender Bar Length L (m):",
+        ],
+        "defaults": ["1.250", "0.240", "0.320", "0.450"],
+        "general_idea": (
+            "Compares how mass distribution controls rotational resistance (I = ∫ r² dm) "
+            "between a uniform solid flywheel rotor (½MR²) and a rotating slender bar "
+            "(1/12 M(w² + L²))."
+        ),
+        "procedure": (
+            "1. Measure mass and outer diameter D of a solid aluminum flywheel rotor "
+            "using a beam balance and Vernier calipers.\n"
+            "2. Measure mass and total length L of a uniform rectangular metal bar "
+            "(standard width 0.075 m).\n"
+            "3. Mount each rigid body onto a vertical rotary motion spindle and apply a "
+            "known hanging torque to observe angular acceleration α.\n"
+            "4. Compare theoretical moments of inertia I_disk and I_plate."
+        ),
+    },
+    "Lab 9: Long-Wire Foucault Pendulum & Small Angle": {
+        "labels": [
+            "Wire Length L (m):",
+            "Measured Period T (s):",
+            "Release Angle θ_0 (deg):",
+            "Period/g Uncertainty δg:",
+        ],
+        "defaults": ["2.480", "3.162", "18.0", "0.04"],
+        "general_idea": (
+            "Uses a long-wire pendulum (T = 2π√(L/g)) to measure local gravitational "
+            "acceleration g and quantifies the nonlinear Taylor-series correction "
+            "(+θ₀²/16) when oscillation amplitude exceeds the small-angle regime."
+        ),
+        "procedure": (
+            "1. Suspend a heavy brass bob from a high ceiling bracket using low-stretch "
+            "steel wire and measure length L from pivot to bob center of mass.\n"
+            "2. Displace the bob by angle θ_0 (measured with a mounted protractor) and "
+            "release without lateral spin.\n"
+            "3. Time 10 complete oscillations across a central photogate to find period T.\n"
+            "4. Compute g, evaluate the finite-amplitude period shift, and verify 2-sigma "
+            "agreement with 9.81 m/s²."
+        ),
+    },
+}
 
 CALCULATION_TYPES: list[str] = [
     "Derivative (d/dx)",
@@ -330,10 +543,15 @@ class State:
 
     active_section: str
     selected_lab: str
+    selected_manual_lab: str
     selected_calc_type: str
     selected_tutor_topic: str
     selected_course: str
     show_steps_or_guide: bool
+    p1_default: str
+    p2_default: str
+    p3_default: str
+    p4_default: str
     latest_physics_output: str
     latest_calculus_output: str
     records: list[WorkRecord]
@@ -415,34 +633,33 @@ def solve_physics_formula(
     p4: float,
 ) -> tuple[str, str, str]:
     """
-    Solve the selected PHYS227 lab calculation given four numeric inputs.
+    Solve the selected classic physics experiment given four numeric inputs.
     Returns (inputs_summary, formatted_result, status_note).
     """
-    if lab_name == "Lab 1: Unit Conversions & Cylinder Density":
-        radius: float = p3 / 2.0
-        dr: float = 0.0005
-        dh: float = 0.001
-        vol: float = math.pi * (radius ** 2) * p4
-        dvol: float = vol * math.sqrt((2.0 * dr / radius) ** 2 + (dh / p4) ** 2)
+    if lab_name == "Lab 1: Archimedes Water Displacement Density":
+        # p1=mass(g), p2=dm(g), p3=V_initial(mL), p4=V_final(mL); 1 mL = 1 cm³
+        vol: float = max(0.01, p4 - p3)
+        dvol: float = math.sqrt(0.2 ** 2 + 0.2 ** 2)
         rho: float = p1 / vol
         drho: float = rho * math.sqrt((p2 / p1) ** 2 + (dvol / vol) ** 2)
         rho_s, drho_s = round_phys227(rho, drho)
         metals: list[str] = identify_matching_metals(rho, drho)
         metal_txt: str = ", ".join(metals) if metals else "None in Table 1"
-        summary: str = f"m={p1}g, d={p3}cm, h={p4}cm"
+        summary: str = f"m={p1}g, Vi={p3}mL, Vf={p4}mL"
         res: str = f"ρ = ({rho_s} ± {drho_s}) g/cm³ | Matches: {metal_txt}"
         status: str = "Matched Metal" if metals else "No Match"
         return summary, res, status
 
-    if lab_name == "Lab 2: Inclined Plane Gravity":
-        sin_theta: float = p1 / p2
-        g_exp: float = p3 / sin_theta
-        _, _, ok = evaluate_discrepancy(g_exp, p4, GRAVITY_STD, 0.03)
-        summary = f"h={p1}m, d={p2}m, a={p3}m/s²"
-        res = f"g = ({g_exp:.3f} ± {p4:.3f}) m/s² (Agrees w/ 9.81: {ok})"
+    if lab_name == "Lab 2: Atwood Machine Gravity Acceleration":
+        # p1=m1(kg), p2=m2(kg), p3=distance d(m), p4=fall time t(s)
+        acc: float = (2.0 * p3) / (p4 ** 2)
+        g_exp: float = acc * (p1 + p2) / max(1e-6, p2 - p1)
+        _, _, ok = evaluate_discrepancy(g_exp, 0.15, GRAVITY_STD, 0.03)
+        summary = f"m1={p1}kg, m2={p2}kg, d={p3}m, t={p4}s"
+        res = f"a={acc:.3f} m/s² | g_exp = {g_exp:.3f} m/s² (Agrees w/ 9.81: {ok})"
         return summary, res, "In Agreement" if ok else "Discrepancy"
 
-    if lab_name == "Lab 3: 2D Vector Addition & Force Table":
+    if lab_name == "Lab 3: Suspended Cable Tension & Equilibrium":
         f1: float = (p1 / 1000.0) * GRAVITY_STD
         f2: float = (p3 / 1000.0) * GRAVITY_STD
         fx: float = f1 * math.cos(math.radians(p2)) + f2 * math.cos(math.radians(p4))
@@ -451,18 +668,20 @@ def solve_physics_formula(
         eq_ang: float = (math.degrees(math.atan2(fy, fx)) + 180.0) % 360.0
         eq_mass: float = (f_net / GRAVITY_STD) * 1000.0
         summary = f"m1={p1}g@{p2}°, m2={p3}g@{p4}°"
-        res = f"Equilibrant: {eq_mass:.2f} g at {eq_ang:.2f}° CCW (F_net={f_net:.4f} N)"
+        res = f"Anchor Tension: {f_net:.4f} N ({eq_mass:.2f} g) at {eq_ang:.2f}° CCW"
         return summary, res, "Balanced"
 
-    if lab_name == "Lab 4: Projectile Motion Range":
-        v0: float = math.sqrt(2.0 * GRAVITY_PROJ * max(0.0, p2 - p1))
+    if lab_name == "Lab 4: Spring-Launcher Table-Edge Projectile":
+        # p1=k(N/m), p2=compression dx(m), p3=table height h(m), p4=x_meas(m); ball m=0.025kg
+        ball_mass: float = 0.025
+        v0: float = math.sqrt((p1 * (p2 ** 2)) / ball_mass)
         x_pred: float = v0 * math.sqrt(2.0 * p3 / GRAVITY_PROJ)
         _, _, ok = evaluate_discrepancy(p4, 0.02, x_pred, 0.03)
-        summary = f"Δy={p2 - p1:.3f}m, h={p3}m, x_meas={p4}m"
+        summary = f"k={p1}N/m, Δx={p2}m, h={p3}m, x_meas={p4}m"
         res = f"v0={v0:.3f} m/s | x_pred={x_pred:.4f} m vs x_meas={p4:.4f} m (Agrees: {ok})"
         return summary, res, "In Agreement" if ok else "Discrepancy"
 
-    if lab_name == "Lab 5: Kinetic Friction Coefficient":
+    if lab_name == "Lab 5: Towed Sled Kinetic Friction":
         rad: float = math.radians(p4)
         f_k: float = (
             p2 * GRAVITY_STD
@@ -471,11 +690,11 @@ def solve_physics_formula(
         )
         normal: float = p1 * GRAVITY_STD * math.cos(rad)
         mu_k: float = f_k / normal
-        summary = f"mt={p1}kg, mh={p2}kg, a={p3}m/s², θ={p4}°"
+        summary = f"msled={p1}kg, mh={p2}kg, a={p3}m/s², θ={p4}°"
         res = f"μ_k = {mu_k:.4f} (f_k = {f_k:.4f} N, N = {normal:.4f} N)"
         return summary, res, "Valid μ_k" if mu_k >= 0.0 else "Check Inputs"
 
-    if lab_name == "Lab 6: Vertical Spring Mechanical Energy":
+    if lab_name == "Lab 6: Vertical Bungee Hooke's Law Energy":
         mass: float = 0.100
         k_en: float = 0.5 * mass * (p4 ** 2)
         ug_en: float = mass * GRAVITY_STD * p3
@@ -485,21 +704,21 @@ def solve_physics_formula(
         res = f"E_tot = {e_tot:.5f} J (K={k_en:.4f}, Ug={ug_en:.4f}, Us={us_en:.4f})"
         return summary, res, "Conserved"
 
-    if lab_name == "Lab 7: Impulse-Momentum Theorem":
+    if lab_name == "Lab 7: Magnetic Cart Rebound Impulse-Momentum":
         dp: float = p1 * (p3 - p2)
         _, _, ok = evaluate_discrepancy(dp, 0.015, p4, 0.015)
         summary = f"m={p1}kg, vi={p2}m/s, vf={p3}m/s, J={p4}N·s"
         res = f"Δp = {dp:.4f} N·s vs J = {p4:.4f} N·s (Agrees: {ok})"
         return summary, res, "In Agreement" if ok else "Discrepancy"
 
-    if lab_name == "Lab 8: Rotational Moment of Inertia":
+    if lab_name == "Lab 8: Flywheel & Slender Bar Rotational Inertia":
         i_disk: float = 0.5 * p1 * ((p2 / 2.0) ** 2)
         i_plate: float = (1.0 / 12.0) * p3 * (0.075 ** 2 + p4 ** 2)
         summary = f"m_d={p1}kg, D={p2}m, m_p={p3}kg, L={p4}m"
-        res = f"I_disk = {i_disk:.6e} kg·m² | I_plate = {i_plate:.6e} kg·m²"
+        res = f"I_flywheel = {i_disk:.6e} kg·m² | I_bar = {i_plate:.6e} kg·m²"
         return summary, res, "Computed"
 
-    # Lab 9: Simple Pendulum & Small Angle
+    # Lab 9: Long-Wire Foucault Pendulum & Small Angle
     g_pend: float = (4.0 * (math.pi ** 2) * p1) / (p2 ** 2)
     rad_amp: float = math.radians(p3)
     pct_shift: float = ((1.0 / 16.0) * (rad_amp ** 2)) * 100.0
@@ -837,7 +1056,7 @@ def build_navigation_bar() -> list[Any]:
 
 
 # ==============================================================================
-# ROUTES (11 ROUTES & 6 DISTINCT PAGES)
+# ROUTES (13 ROUTES & 6 DISTINCT PAGES)
 # ==============================================================================
 
 @route
@@ -849,7 +1068,7 @@ def index(state: State) -> Page:
         [
             Header("PHYS227, Calculus & Engineering Science Platform"),
             Text(
-                "Explore experimental physics labs, step-by-step symbolic calculus "
+                "Explore classic experimental physics labs, step-by-step symbolic calculus "
                 "derivations, and real-world engineering course applications."
             ),
             LineBreak(),
@@ -857,9 +1076,11 @@ def index(state: State) -> Page:
             Header("Site Workspaces", 2),
             BulletedList(
                 [
-                    "Section 1 — Physics Idea and Applications: PHYS227 Labs 1–9 "
-                    "solvers, repeated-trial sample statistics, PHYS227 error rounding, "
-                    "and 2-sigma discrepancy verification.",
+                    "Section 1 — Physics Idea and Applications: Classic experimental "
+                    "solvers (Archimedes displacement, Atwood machine, suspended cables, "
+                    "spring-launcher projectile, sled friction, bungee energy, magnetic "
+                    "cart impulse, flywheel inertia, Foucault pendulum), interactive "
+                    "parameter labels, and an in-person Lab Manual & Procedure dropdown.",
                     "Section 2 — Calculus Calculations and Explanations: Dropdown "
                     "solver for Derivatives, Partial Derivatives, Integrals, "
                     "Double Integrals, Limits, and Taylor Series with full intermediate "
@@ -877,44 +1098,80 @@ def index(state: State) -> Page:
 
 @route
 def physics(state: State) -> Page:
-    """Render Section 1: Physics Idea and Applications (Labs 1-9 & Error Analysis)."""
+    """Render Section 1: Classic Physics Experiments, UI Parameter Chooser & Manual."""
     state.active_section = "Physics Idea and Applications"
-    guide_text: str = ""
+    active_info: dict[str, Any] = LAB_DETAILS.get(
+        state.selected_lab, LAB_DETAILS[LAB_TOPICS[0]]
+    )
+    param_labels: list[str] = active_info["labels"]
+
+    manual_info: dict[str, Any] = LAB_DETAILS.get(
+        state.selected_manual_lab, LAB_DETAILS[LAB_TOPICS[0]]
+    )
+
+    quick_ref_rows: list[list[str]] = [
+        ["Parameter Slot", "Active Experiment Variable", "Loaded Default"],
+        ["Input 1", param_labels[0], state.p1_default],
+        ["Input 2", param_labels[1], state.p2_default],
+        ["Input 3", param_labels[2], state.p3_default],
+        ["Input 4", param_labels[3], state.p4_default],
+    ]
+
+    guide_block: list[Any] = []
     if state.show_steps_or_guide:
-        guide_text = (
-            "Parameter Guide: Lab 1 (m[g], dm[g], d[cm], h[cm]) | "
-            "Lab 2 (h[m], d[m], a[m/s²], δg) | Lab 3 (m1[g], θ1°, m2[g], θ2°) | "
-            "Lab 4 (y0[m], ymax[m], h[m], x_meas[m]) | Lab 5 (mt[kg], mh[kg], a, θ°) | "
-            "Lab 6 (k, ys[m], y[m], v[m/s]) | Lab 7 (m[kg], vi, vf, J) | "
-            "Lab 8 (m_disk, D_disk, m_plate, L_plate) | Lab 9 (L[m], T[s], θ°, δg)"
-        )
+        guide_block = [
+            Table(quick_ref_rows),
+            LineBreak(),
+        ]
 
     return Page(
         state,
         [
             Header("Section 1: Physics Idea and Applications"),
             *build_navigation_bar(),
-            Header("A. PHYS227 Lab Solvers (Labs 1–9)", 3),
-            Text("Select Lab Module:"),
+            Header("A. Classic Physics Experiment Solver", 3),
+            Text("Step 1 — Choose Experiment:"),
             SelectBox("selected_lab", LAB_TOPICS, state.selected_lab),
+            Button("Load Lab Labels & Defaults", "/select_physics_lab"),
             LineBreak(),
             CheckBox("show_steps_or_guide", state.show_steps_or_guide),
-            Text("Show Parameter Guide"),
+            Text("Show Parameter Mapping Table"),
             LineBreak(),
-            Text(guide_text),
+            *guide_block,
+            Text(f"Step 2 — Enter Measurements for [{state.selected_lab}]:"),
             LineBreak(),
-            Text("Parameter 1:"),
-            TextBox("p1_str", "0.052"),
-            Text("Parameter 2:"),
-            TextBox("p2_str", "1.000"),
-            Text("Parameter 3:"),
-            TextBox("p3_str", "0.505"),
-            Text("Parameter 4:"),
-            TextBox("p4_str", "0.150"),
+            Text(param_labels[0]),
+            TextBox("p1_str", state.p1_default),
             LineBreak(),
-            Button("Solve Physics Application & Log", "/solve_physics"),
+            Text(param_labels[1]),
+            TextBox("p2_str", state.p2_default),
+            LineBreak(),
+            Text(param_labels[2]),
+            TextBox("p3_str", state.p3_default),
+            LineBreak(),
+            Text(param_labels[3]),
+            TextBox("p4_str", state.p4_default),
+            LineBreak(),
+            Button("Solve Experiment & Log Result", "/solve_physics"),
             HorizontalRule(),
-            Header("B. Repeated Trials & Discrepancy Error Analysis", 3),
+            Header("B. In-Person Lab Manual: General Idea & Procedure", 3),
+            Text("Select Any Experiment to View Its Theory & Step-by-Step Setup:"),
+            SelectBox("selected_manual_lab", LAB_TOPICS, state.selected_manual_lab),
+            Button("Load Experiment Idea & Procedure", "/load_lab_manual"),
+            LineBreak(),
+            Header(f"Experiment Title: {state.selected_manual_lab}", 3),
+            Text(f"General Scientific Idea: {manual_info['general_idea']}"),
+            LineBreak(),
+            Text("In-Person Experimental Procedure:"),
+            LineBreak(),
+            TextArea(
+                "lab_procedure_box",
+                manual_info["procedure"],
+                rows=6,
+                cols=85,
+            ),
+            HorizontalRule(),
+            Header("C. Repeated Trials & Discrepancy Error Analysis", 3),
             Text("Repeated Trial Values (comma- or space-separated):"),
             TextArea("trials_text", "5.02, 4.96, 5.05, 4.98, 5.01"),
             Text("Units:"),
@@ -930,6 +1187,29 @@ def physics(state: State) -> Page:
 
 
 @route
+def select_physics_lab(
+    state: State, selected_lab: str, show_steps_or_guide: bool
+) -> Page:
+    """Update active physics experiment, populate labeled defaults, and sync manual."""
+    state.selected_lab = selected_lab
+    state.selected_manual_lab = selected_lab
+    state.show_steps_or_guide = show_steps_or_guide
+    defaults: list[str] = LAB_DETAILS[selected_lab]["defaults"]
+    state.p1_default = defaults[0]
+    state.p2_default = defaults[1]
+    state.p3_default = defaults[2]
+    state.p4_default = defaults[3]
+    return physics(state)
+
+
+@route
+def load_lab_manual(state: State, selected_manual_lab: str) -> Page:
+    """Update the selected lab manual dropdown to display its idea and procedure."""
+    state.selected_manual_lab = selected_manual_lab
+    return physics(state)
+
+
+@route
 def solve_physics(
     state: State,
     selected_lab: str,
@@ -939,9 +1219,14 @@ def solve_physics(
     p3_str: str,
     p4_str: str,
 ) -> Page:
-    """Process physics lab inputs, update State fields, and log a WorkRecord."""
+    """Process physics experiment inputs, update State fields, and log a WorkRecord."""
     state.selected_lab = selected_lab
     state.show_steps_or_guide = show_steps_or_guide
+    state.p1_default = p1_str
+    state.p2_default = p2_str
+    state.p3_default = p3_str
+    state.p4_default = p4_str
+
     p1: float = float(p1_str)
     p2: float = float(p2_str)
     p3: float = float(p3_str)
@@ -1157,7 +1442,6 @@ def log(state: State) -> Page:
     physics_count: int = 0
     calculus_count: int = 0
 
-    # Loop meaningfully iterating over attributes of list[WorkRecord]
     for rec in state.records:
         if rec.section == "Physics Idea and Applications":
             physics_count += 1
@@ -1203,7 +1487,7 @@ def clear_log(state: State) -> Page:
 
 
 # ==============================================================================
-# UNIT TESTS (Covering Helper Functions and All 11 Routes)
+# UNIT TESTS (Covering Helper Functions and All 13 Routes)
 # ==============================================================================
 
 def run_all_tests() -> None:
@@ -1215,6 +1499,19 @@ def run_all_tests() -> None:
     mean_v, std_v = compute_sample_stats([5.2, 5.7, 5.5])
     assert_equal(round(mean_v, 3), 5.467)
     assert_equal(round(std_v, 3), 0.252)
+
+    # Classic lab solver helper tests
+    _, l1_res, l1_st = solve_physics_formula(
+        "Lab 1: Archimedes Water Displacement Density", 134.5, 0.2, 50.0, 65.0
+    )
+    assert_equal("8.97" in l1_res, True)
+    assert_equal(l1_st, "Matched Metal")
+
+    _, l2_res, l2_st = solve_physics_formula(
+        "Lab 2: Atwood Machine Gravity Acceleration", 0.200, 0.220, 1.000, 2.060
+    )
+    assert_equal("9.89" in l2_res, True)
+    assert_equal(l2_st, "In Agreement")
 
     # Calculus helper tests (pure-Python engine)
     _, d_res = solve_calculus_query("Derivative (d/dx)", "x^3 + 2*x", "1")
@@ -1240,14 +1537,20 @@ def run_all_tests() -> None:
     )
     assert_equal(lim_res, "1")
 
-    # Route unit tests (all 11 routes)
+    # Route unit tests (all 13 routes)
+    init_defs: list[str] = LAB_DETAILS[LAB_TOPICS[0]]["defaults"]
     test_state: State = State(
         active_section="Overview",
         selected_lab=LAB_TOPICS[0],
+        selected_manual_lab=LAB_TOPICS[0],
         selected_calc_type=CALCULATION_TYPES[0],
         selected_tutor_topic=TUTOR_TOPICS[0],
         selected_course=ENGINEERING_COURSES[0],
         show_steps_or_guide=True,
+        p1_default=init_defs[0],
+        p2_default=init_defs[1],
+        p3_default=init_defs[2],
+        p4_default=init_defs[3],
         latest_physics_output="Ready.",
         latest_calculus_output="Ready.",
         records=[],
@@ -1259,14 +1562,30 @@ def run_all_tests() -> None:
     p_phys: Page = physics(test_state)
     assert_equal(p_phys.state.active_section, "Physics Idea and Applications")
 
+    p_sel_lab: Page = select_physics_lab(
+        test_state, "Lab 2: Atwood Machine Gravity Acceleration", True
+    )
+    assert_equal(
+        p_sel_lab.state.selected_lab, "Lab 2: Atwood Machine Gravity Acceleration"
+    )
+    assert_equal(p_sel_lab.state.p1_default, "0.200")
+
+    p_manual: Page = load_lab_manual(
+        test_state, "Lab 9: Long-Wire Foucault Pendulum & Small Angle"
+    )
+    assert_equal(
+        p_manual.state.selected_manual_lab,
+        "Lab 9: Long-Wire Foucault Pendulum & Small Angle",
+    )
+
     p_s_phys: Page = solve_physics(
         test_state,
-        "Lab 2: Inclined Plane Gravity",
+        "Lab 2: Atwood Machine Gravity Acceleration",
         True,
-        "0.052",
+        "0.200",
+        "0.220",
         "1.000",
-        "0.505",
-        "0.150",
+        "2.060",
     )
     assert_equal(len(p_s_phys.state.records), 1)
     assert_equal(p_s_phys.state.records[0].section, "Physics Idea and Applications")
@@ -1313,15 +1632,21 @@ run_all_tests()
 if __name__ == "__main__":
     # Note: start_server launches the live web server and blocks execution,
     # so it cannot be unit tested directly.
+    start_defaults: list[str] = LAB_DETAILS[LAB_TOPICS[0]]["defaults"]
     start_server(
         State(
             active_section="Overview",
             selected_lab=LAB_TOPICS[0],
+            selected_manual_lab=LAB_TOPICS[0],
             selected_calc_type=CALCULATION_TYPES[0],
             selected_tutor_topic=TUTOR_TOPICS[0],
             selected_course=ENGINEERING_COURSES[0],
             show_steps_or_guide=True,
-            latest_physics_output="Enter lab parameters above and click Solve.",
+            p1_default=start_defaults[0],
+            p2_default=start_defaults[1],
+            p3_default=start_defaults[2],
+            p4_default=start_defaults[3],
+            latest_physics_output="Select an experiment above, enter parameters, and click Solve.",
             latest_calculus_output="Choose a calculus type and click Calculate.",
             records=[],
         )
